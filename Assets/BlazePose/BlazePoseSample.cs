@@ -194,7 +194,7 @@ public sealed class BlazePoseSample : MonoBehaviour
 
         if (landmarkResult != null && landmarkResult.score > 0.2f)
         {
-            DrawCropMatrix(poseLandmark.CropMatrix);
+            
             DrawJoints(landmarkResult.joints);
 
             var shoulderL4 = landmarkResult.joints[PoseLandmarks.LEFT_SHOULDER];
@@ -316,24 +316,6 @@ public sealed class BlazePoseSample : MonoBehaviour
         {
             draw.Point(MathTF.Lerp(min, max, (Vector3)kp, true), 0.05f);
         }
-        draw.Apply();
-    }
-
-    void DrawCropMatrix(in Matrix4x4 matrix)
-    {
-        draw.color = Color.red;
-
-        Vector3 min = rtCorners[0];
-        Vector3 max = rtCorners[2];
-
-        var mtx = WebCamUtil.GetMatrix(-webcamTexture.videoRotationAngle, false, webcamTexture.videoVerticallyMirrored)
-            * matrix.inverse;
-        Vector3 a = MathTF.LerpUnclamped(min, max, mtx.MultiplyPoint3x4(new Vector3(0, 0, 0)));
-        Vector3 b = MathTF.LerpUnclamped(min, max, mtx.MultiplyPoint3x4(new Vector3(1, 0, 0)));
-        Vector3 c = MathTF.LerpUnclamped(min, max, mtx.MultiplyPoint3x4(new Vector3(1, 1, 0)));
-        Vector3 d = MathTF.LerpUnclamped(min, max, mtx.MultiplyPoint3x4(new Vector3(0, 1, 0)));
-
-        draw.Quad(a, b, c, d, 0.02f);
         draw.Apply();
     }
 
